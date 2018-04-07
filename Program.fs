@@ -4,9 +4,17 @@ open Grid
 open BinaryTree
 open Sidewinder
 open DrawAscii
+open System
 
 [<EntryPoint>]
 let main argv =
-    //prepareGrid 6 6 |> binaryTree |> drawAscii |> printfn "%s"
-    prepareGrid 10 10 |> sidewinder |> drawAscii |> printfn "%s"
+
+    let rec drawNext _ =
+        match (Console.ReadKey ()).Key with
+        | ConsoleKey.Escape -> ()
+        | _ ->
+            Console.Clear()
+            prepareGrid 20 20 |> sidewinder |> drawAscii |> printfn "%s" |> drawNext
+
+    drawNext ()
     0 // return an integer exit code
