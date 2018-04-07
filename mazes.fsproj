@@ -7,6 +7,7 @@
     <Compile Include="Utils.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="BinaryTree.fs" />
+    <Compile Include="Sidewinder.fs" />
     <Compile Include="DrawAscii.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
