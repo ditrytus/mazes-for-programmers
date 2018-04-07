@@ -2,8 +2,9 @@
 
 open Grid
 open BinaryTree
+open DrawAscii
 
 [<EntryPoint>]
 let main argv =
-    prepareGrid 4 4 |> binaryTree |> ignore
+    prepareGrid 6 6 |> binaryTree |> drawAscii |> printfn "%s"
     0 // return an integer exit code
