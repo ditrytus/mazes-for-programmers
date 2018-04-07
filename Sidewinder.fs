@@ -15,9 +15,9 @@ let sidewinder (grid:Grid) =
 
             let newRun = currentCell::currentRun
 
-            let carveNorth (newRun : Cell list) noNorth (grid:Grid) =
+            let carveNorth noNorth (grid:Grid) =
 
-                match random currentRun with
+                match random newRun with
                 | None -> grid
                 | Some randomCell ->
 
@@ -27,7 +27,7 @@ let sidewinder (grid:Grid) =
                         grid.Link randomCell northCell |> processRow [] rest
 
             match rest with
-            | [] -> carveNorth newRun grid grid
+            | [] -> carveNorth grid grid
             | nextCell::_ ->
 
                 let carveEast (grid:Grid) =
@@ -35,6 +35,6 @@ let sidewinder (grid:Grid) =
 
                 match rand.Next(2) with
                 | 0 -> carveEast grid
-                | _ -> carveNorth newRun (carveEast grid) grid
+                | _ -> carveNorth (carveEast grid) grid
                         
     grid.Rows |> Seq.fold (fun grid row -> grid |> processRow [] (row |> List.ofSeq)) grid
