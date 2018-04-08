@@ -34,7 +34,8 @@ let sidewinder (grid:Grid) =
                     (grid.Link currentCell nextCell) |> processRow newRun rest
 
                 match rand.Next(2) with
-                | 0 -> carveEast grid
-                | _ -> carveNorth (carveEast grid) grid
+                | 0 -> carveNorth (carveEast grid) grid
+                | _ -> carveEast grid
+
                         
     grid.Rows |> Seq.fold (fun grid row -> grid |> processRow [] (row |> List.ofSeq)) grid
