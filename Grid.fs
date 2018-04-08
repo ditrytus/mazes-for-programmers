@@ -14,9 +14,8 @@ type Link = Cell * Cell
 
 let areEqual (a,b) (c,d) = (a,b) = (c,d) || (a,b) = (d,c) || (b,a) = (c,d) || (b,a) = (d,c)
 
-type Direction = West | South | East | North
-
-let allDirections = [West; South; East; North]
+type Direction = West | South | East | North with
+    static member All = [West; South; East; North]
 
 type Neighbours = Map<Cell,Map<Direction,Option<Cell>>>
 

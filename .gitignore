@@ -324,3 +324,5 @@ ASALocalRun/
 *.nvuser
 
 .DS_Store
+
+*.png

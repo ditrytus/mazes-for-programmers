@@ -9,6 +9,11 @@
     <Compile Include="BinaryTree.fs" />
     <Compile Include="Sidewinder.fs" />
     <Compile Include="DrawAscii.fs" />
+    <Compile Include="DrawPng.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0003" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0003" />
   </ItemGroup>
 </Project>

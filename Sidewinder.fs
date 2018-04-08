@@ -22,25 +22,18 @@ let sidewinder (grid:Grid) =
                 | Some randomCell ->
 
                     match randomCell |> grid.GoTo North with
-                    | None ->
-                        noNorth grid
-                    | Some northCell ->
-                        grid.Link randomCell northCell |> processRow [] rest
+                    | None -> noNorth grid
+                    | Some northCell -> grid.Link randomCell northCell |> processRow [] rest
 
             match rest with
-            | [] ->
-                carveNorth id grid
+            | [] -> carveNorth id grid
 
             | nextCell::_ ->
 
-                let carveEast (grid:Grid) =
-                    (grid.Link currentCell nextCell) |> processRow newRun rest
+                let carveEast (grid:Grid) = (grid.Link currentCell nextCell) |> processRow newRun rest
 
                 match rand.Next(2) with
-                | 0 ->
-                    carveNorth carveEast grid
-                | _ ->
-                    carveEast grid
-
+                | 0 -> carveNorth carveEast grid
+                | _ -> carveEast grid
                         
     grid.Rows |> Seq.fold (fun grid row -> grid |> processRow [] (row |> List.ofSeq)) grid
