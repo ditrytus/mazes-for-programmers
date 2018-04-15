@@ -13,3 +13,9 @@ let findPath (dist:Distances) goal (grid:Grid) =
     findNext [goal] goal
 
 let pathContent path content cell = if path |> List.contains cell then content cell else "   "
+
+let longestPath grid =
+    let start = grid |> Distances.forRoot (0,0) |> Distances.max |> fst
+    let dist = grid |> Distances.forRoot start
+    let goal = dist |> Distances.max |> fst
+    (dist, findPath dist goal grid)

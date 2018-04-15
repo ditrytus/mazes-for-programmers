@@ -26,5 +26,9 @@ type Distances = {
 
     member this.Set cell distance = {this with Cells = this.Cells |> Map.add cell distance}
 
+    member this.Max = max this
+
+let max dist = dist.Cells |> Map.toList |> List.maxBy snd
+
 let distancesContent (distances:Distances) cell =
     if distances.Cells.ContainsKey cell then (string distances.[cell]).PadRight 3 else "   "

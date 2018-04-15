@@ -21,6 +21,10 @@ let main argv =
         let maze = grid |> sidewinder
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
+        | ConsoleKey.L ->
+            Console.Clear()
+            let (dist, path) = Dijkstra.longestPath maze
+            maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
             let dist = maze |> Distances.forRoot (0, 0)
