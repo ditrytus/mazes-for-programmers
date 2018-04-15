@@ -1,12 +1,14 @@
 ﻿module DrawAscii
 
 open Grid
-let drawAscii (grid:Grid) = 
+
+let drawAscii contentsOf (grid:Grid) = 
 
     let drawRow (row: Cell seq) = 
+    
 
         let drawMiddle (cell:Cell) =
-            "   " + (if grid.IsLinkedTo East cell then " " else "║")
+            contentsOf cell + (if grid.IsLinkedTo East cell then " " else "║")
 
         let drawBottom (cell:Cell) =
             (if grid.IsLinkedTo South cell then "   " else "═══") + "╬"
@@ -16,4 +18,7 @@ let drawAscii (grid:Grid) =
 
     "╬" + ("═══╬" |> String.replicate grid.ColumnsCount) + "\n" +
     (grid.Rows |> Seq.map drawRow |> String.concat "")
-    
+
+let emptyCell cell = "   "
+
+let drawAsciiEmpty = drawAscii emptyCell

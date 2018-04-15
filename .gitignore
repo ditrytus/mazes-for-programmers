@@ -326,3 +326,4 @@ ASALocalRun/
 .DS_Store
 
 *.png
+.vscode

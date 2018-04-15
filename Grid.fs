@@ -46,7 +46,7 @@ type Grid =
         let rnd = System.Random()
         this.Cells |> List.item (rnd.Next <| this.Size)
 
-    member this.Rows = this.Cells |> Seq.ofList |> Seq.groupBy (fun (r, _) -> r) |> Seq.map (fun (_,g) -> g)
+    member this.Rows = this.Cells |> Seq.ofList |> Seq.groupBy fst |> Seq.map snd
 
     member this.GoTo dir cell = this.Neighbourhood.[cell].[dir]
 
@@ -56,6 +56,8 @@ type Grid =
         match this.GoTo dir cell with
         | Some neighbour -> this.AreLinked cell neighbour
         | None -> false
+
+    member this.LinksOf cell = this.Neighbourhood.[cell] |> Map.toList |> List.map snd |> List.choose id |> List.where (this.AreLinked cell)
 
 let prepareGrid rows columns = 
     let cells = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]
