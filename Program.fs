@@ -6,12 +6,16 @@ open Sidewinder
 open DrawAscii
 open DrawPng
 open Distances
+open Dijkstra
 open System
 
 [<EntryPoint>]
 let main argv =
 
-    let grid = prepareGrid 10 10
+    let height = 10
+    let width = 10
+
+    let grid = prepareGrid height width
 
     let rec drawNext _ =
         let maze = grid |> sidewinder
@@ -19,7 +23,9 @@ let main argv =
         | ConsoleKey.Escape -> ()
         | ConsoleKey.D ->
             Console.Clear()
-            maze |> drawAscii (maze |> Distances.forRoot (0, 0) |> distancesContent) |> printfn "\n%s" |> drawNext
+            let dist = maze |> Distances.forRoot (0, 0)
+            let path = maze |> Dijkstra.findPath dist (height - 1, width - 1)
+            maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
             Console.Clear()
             maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10

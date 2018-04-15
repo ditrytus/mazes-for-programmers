@@ -11,6 +11,7 @@
     <Compile Include="DrawAscii.fs" />
     <Compile Include="DrawPng.fs" />
     <Compile Include="Distances.fs" />
+    <Compile Include="Dijkstra.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
