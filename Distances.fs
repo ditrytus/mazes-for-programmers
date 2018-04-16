@@ -1,6 +1,7 @@
 ﻿module Distances
 
 open Grid
+open SixLabors.ImageSharp.PixelFormats
 
 type Distances = {
     Root: Cell;
@@ -26,9 +27,13 @@ type Distances = {
 
     member this.Set cell distance = {this with Cells = this.Cells |> Map.add cell distance}
 
-    member this.Max = max this
-
 let max dist = dist.Cells |> Map.toList |> List.maxBy snd
+
+type Distances with member this.Max = max this
 
 let distancesContent (distances:Distances) cell =
     if distances.Cells.ContainsKey cell then (string distances.[cell]).PadRight 3 else "   "
+
+let shadeColor (dist:Distances) cell =
+    let shade = ((dist.Item cell |> float) / (snd dist.Max |> float)) * 255.0
+    Rgba32 (shade |> byte, shade |> byte, 255 |> byte)
