@@ -12,8 +12,8 @@ open System
 [<EntryPoint>]
 let main argv =
 
-    let height = 30
-    let width = 30
+    let height = 100
+    let width = 100
 
     let grid = prepareGrid height width
 
@@ -21,10 +21,15 @@ let main argv =
         let maze = grid |> sidewinder
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
-        | ConsoleKey.R ->
+        | ConsoleKey.G ->
+            let filenamePrefix = DateTime.Now.Ticks.ToString()
+            let dist = maze |> Distances.forRoot (height/2, width/2)
+            seq { 0 .. snd dist.Max - 1 } |> Seq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
+            maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
+        | ConsoleKey.R -> 
             Console.Clear()
             let dist = maze |> Distances.forRoot (height/2, width/2)
-            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) + 1 |> float))
+            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max / 2) |> float))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
