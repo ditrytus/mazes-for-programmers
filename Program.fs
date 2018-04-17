@@ -8,6 +8,7 @@ open DrawPng
 open Distances
 open Dijkstra
 open System
+open FSharp.Collections.ParallelSeq
 
 [<EntryPoint>]
 let main argv =
@@ -24,7 +25,8 @@ let main argv =
         | ConsoleKey.G ->
             let filenamePrefix = DateTime.Now.Ticks.ToString()
             let dist = maze |> Distances.forRoot (height/2, width/2)
-            seq { 0 .. snd dist.Max - 1 } |> Seq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
+            seq { 0 .. snd dist.Max - 1 } |>
+                PSeq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.R -> 
             Console.Clear()
