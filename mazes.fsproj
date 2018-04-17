@@ -10,6 +10,7 @@
     <Compile Include="Sidewinder.fs" />
     <Compile Include="DrawAscii.fs" />
     <Compile Include="DrawPng.fs" />
+    <Compile Include="Colors.fs" />
     <Compile Include="Distances.fs" />
     <Compile Include="Dijkstra.fs" />
     <Compile Include="Program.fs" />

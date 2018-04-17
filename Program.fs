@@ -12,8 +12,8 @@ open System
 [<EntryPoint>]
 let main argv =
 
-    let height = 100
-    let width = 100
+    let height = 30
+    let width = 30
 
     let grid = prepareGrid height width
 
@@ -21,11 +21,16 @@ let main argv =
         let maze = grid |> sidewinder
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
+        | ConsoleKey.R ->
+            Console.Clear()
+            let dist = maze |> Distances.forRoot (height/2, width/2)
+            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) + 1 |> float))
+            maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
-            let (dist, path) = Dijkstra.longestPath maze
-            maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s"
-            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist) |> drawNext
+            let dist = maze |> Distances.forRoot (height/2, width/2)
+            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
+            maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.L ->
             Console.Clear()
             let (dist, path) = Dijkstra.longestPath maze

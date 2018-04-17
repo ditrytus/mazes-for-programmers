@@ -2,6 +2,7 @@
 
 open Grid
 open SixLabors.ImageSharp.PixelFormats
+open Colors
 
 type Distances = {
     Root: Cell;
@@ -29,11 +30,26 @@ type Distances = {
 
 let max dist = dist.Cells |> Map.toList |> List.maxBy snd
 
-type Distances with member this.Max = max this
+type Distances with
+    
+    member this.Max = max this
+
+    member this.NormItem cell = (this.Item cell |> float) / (snd this.Max |> float)
 
 let distancesContent (distances:Distances) cell =
     if distances.Cells.ContainsKey cell then (string distances.[cell]).PadRight 3 else "   "
 
+let floatRgba32 (r:float, g:float, b:float) = Rgba32 (r |> byte, g |> byte, b |> byte)
+
 let shadeColor (dist:Distances) cell =
-    let shade = ((dist.Item cell |> float) / (snd dist.Max |> float)) * 255.0
-    Rgba32 (shade |> byte, shade |> byte, 255 |> byte)
+    let shade = 255.0 - (dist.NormItem cell) * 255.0
+    (shade, shade, 255.0) |> floatRgba32
+
+let rainbowShade (dist:Distances) cycle cell =
+    let t =
+        match ((dist.Item cell |> float) % cycle) / cycle with
+        | x when x < 0.5 -> x * 2.0
+        | x -> 1.0 - ((x - 0.5) * 2.0)
+    let hue = 360.0 * t
+    let (r,g,b) = hsv2rgb (hue, 1.0, 1.0)
+    (r * 255.0, g * 255.0, b * 255.0) |> floatRgba32
