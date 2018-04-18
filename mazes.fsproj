@@ -10,6 +10,7 @@
     <Compile Include="Sidewinder.fs" />
     <Compile Include="AldousBroder.fs" />
     <Compile Include="Wilson.fs" />
+    <Compile Include="HuntAndKill.fs" />
     <Compile Include="DrawAscii.fs" />
     <Compile Include="DrawPng.fs" />
     <Compile Include="Colors.fs" />
