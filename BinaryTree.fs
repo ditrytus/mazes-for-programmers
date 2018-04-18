@@ -12,7 +12,7 @@ let binaryTree (grid:Grid) =
             |> List.map (fun dir -> c |> grid.GoTo dir) 
             |> List.choose id
 
-        match cell |> neighbours |> random with
+        match cell |> neighbours |> randomItem with
         | Some neighbour ->  grid.Link cell neighbour
         | None -> grid
 

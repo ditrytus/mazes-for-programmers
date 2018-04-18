@@ -17,7 +17,7 @@ let sidewinder (grid:Grid) =
 
             let carveNorth noNorth (grid:Grid) =
 
-                match random newRun with
+                match randomItem newRun with
                 | None -> grid
                 | Some randomCell ->
 

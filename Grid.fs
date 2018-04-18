@@ -57,7 +57,11 @@ type Grid =
         | Some neighbour -> this.AreLinked cell neighbour
         | None -> false
 
-    member this.LinksOf cell = this.Neighbourhood.[cell] |> Map.toList |> List.map snd |> List.choose id |> List.where (this.AreLinked cell)
+    member this.NeighboursOf cell = this.Neighbourhood.[cell] |> Map.toList |> List.map snd |> List.choose id
+
+    member this.LinksOf cell = this.NeighboursOf cell |> List.where (this.AreLinked cell)
+
+
 
 let prepareGrid rows columns = 
     let cells = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]

@@ -7,22 +7,24 @@ open DrawAscii
 open DrawPng
 open Distances
 open Dijkstra
+open AldousBroder
 open System
 open FSharp.Collections.ParallelSeq
 
 [<EntryPoint>]
 let main argv =
 
-    let height = 100
-    let width = 100
+    let height = 30
+    let width = 30
 
     let grid = prepareGrid height width
 
     let rec drawNext _ =
-        let maze = grid |> sidewinder
+        let maze = grid |> aldousBroder
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
         | ConsoleKey.G ->
+            Console.Clear()
             let filenamePrefix = DateTime.Now.Ticks.ToString()
             let dist = maze |> Distances.forRoot (height/2, width/2)
             seq { 0 .. snd dist.Max - 1 } |>
