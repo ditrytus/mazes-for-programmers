@@ -9,6 +9,7 @@
     <Compile Include="BinaryTree.fs" />
     <Compile Include="Sidewinder.fs" />
     <Compile Include="AldousBroder.fs" />
+    <Compile Include="Wilson.fs" />
     <Compile Include="DrawAscii.fs" />
     <Compile Include="DrawPng.fs" />
     <Compile Include="Colors.fs" />

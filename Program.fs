@@ -8,19 +8,20 @@ open DrawPng
 open Distances
 open Dijkstra
 open AldousBroder
+open Wilson
 open System
 open FSharp.Collections.ParallelSeq
 
 [<EntryPoint>]
 let main argv =
 
-    let height = 30
-    let width = 30
+    let height = 10
+    let width = 10
 
     let grid = prepareGrid height width
 
     let rec drawNext _ =
-        let maze = grid |> aldousBroder
+        let maze = grid |> wilson
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
         | ConsoleKey.G ->
