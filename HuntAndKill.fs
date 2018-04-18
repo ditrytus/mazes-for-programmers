@@ -3,31 +3,30 @@
 open Grid
 open Utils
 
-
 let huntAndKill (grid:Grid) = 
 
-    let rec processStep cell (grid:Grid) =
+    let rec processStep (unvisited:Cell list) cell (grid:Grid) =
 
-        let isNotVisited cell = grid.LinksOf cell |> Seq.isEmpty
-        let isVisited cell = cell |> isNotVisited |> not
-        let visitedNeighboursOf cell = cell |> grid.NeighboursOf |> Seq.filter isVisited
+        match unvisited with
+        | [] -> grid
+        | _ ->
 
-        match grid.NeighboursOf cell |> List.where isNotVisited |> randomItem with
-        | Some next -> grid.Link cell next |> processStep next
-        | None -> 
+            let processNextStep next = processStep (unvisited |> List.except [next]) next
 
-            let next = grid.Cells
-                       |> Seq.filter isNotVisited
-                       |> Seq.filter (fun c -> visitedNeighboursOf c |> Seq.isEmpty |> not)
-                       |> Seq.tryItem 0
+            match grid.NeighboursOf cell |> Set.ofList |> Set.intersect (unvisited |> Set.ofList) |> Set.toList |> randomItem with
+            | Some next -> grid.Link cell next |> processNextStep next
+            | None -> 
 
-            match next with
-            | None -> grid
-            | Some next ->
+                let isVisited cell = unvisited |> Seq.contains cell |> not
+                let visitedNeighboursOf cell = cell |> grid.NeighboursOf |> Seq.filter isVisited
+
+                let next = unvisited
+                           |> Seq.where (fun c -> visitedNeighboursOf c |> Seq.isEmpty |> not)
+                           |> Seq.item 0
 
                 match visitedNeighboursOf next |> List.ofSeq |> randomItem with
                 | None -> failwith "There can not be no visited neighbours because it was checked before."
-                | Some neighbour -> grid.Link next neighbour |> processStep next
+                | Some neighbour -> grid.Link next neighbour |> processNextStep next
 
-
-    grid |> processStep grid.RandomCell
+    let randomCell = grid.RandomCell
+    grid |> processStep (grid.Cells |> List.except [randomCell]) randomCell

@@ -35,7 +35,7 @@ let main argv =
         | ConsoleKey.R -> 
             Console.Clear()
             let dist = maze |> Distances.forRoot (height/2, width/2)
-            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max / 2) |> float))
+            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) |> float))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
