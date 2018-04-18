@@ -16,8 +16,8 @@ open FSharp.Collections.ParallelSeq
 [<EntryPoint>]
 let main argv =
 
-    let height = 30
-    let width = 30
+    let height = 20
+    let width = 20
 
     let grid = prepareGrid height width
 
@@ -25,6 +25,26 @@ let main argv =
         let maze = grid |> huntAndKill
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
+        | ConsoleKey.T ->
+            Console.Clear()
+            [
+                ("Binary tree", binaryTree);
+                ("Sidewinder", sidewinder);
+                ("Aldous-Broder", aldousBroder);
+                ("Wilson", wilson);
+                ("Hunt and Kill", huntAndKill)
+            ]
+            |> List.map (fun (name, alg) ->
+                printfn "Running %s..." name
+                let avg = {0..10}
+                        |> Seq.averageBy (fun i -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
+                (name, avg)
+                )
+            |> List.iter (fun (name, avg) ->
+                let size = width * height
+                printfn "%s: %i%% (%i/%i)" name (int ((avg/float size)*100.0)) (int avg) size
+               )
+            |> drawNext
         | ConsoleKey.G ->
             Console.Clear()
             let filenamePrefix = DateTime.Now.Ticks.ToString()

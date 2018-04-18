@@ -19,6 +19,6 @@ let drawAscii contentsOf (grid:Grid) =
     "╬" + ("═══╬" |> String.replicate grid.ColumnsCount) + "\n" +
     (grid.Rows |> Seq.map drawRow |> String.concat "")
 
-let emptyContent cell = "   "
+let emptyContent _ = "   "
 
 let drawAsciiEmpty = drawAscii emptyContent

@@ -61,6 +61,8 @@ type Grid =
 
     member this.LinksOf cell = this.NeighboursOf cell |> List.where (this.AreLinked cell)
 
+    member this.DeadEnds = this.Cells |> List.where (fun cell -> (this.LinksOf cell |> List.length) = 1)
+
 
 
 let prepareGrid rows columns = 
