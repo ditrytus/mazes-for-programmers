@@ -10,7 +10,7 @@ type Distances = {
 
     } with
 
-    static member forRoot root (grid:Grid) =
+    static member ForRoot root (grid:Grid) =
 
         let rec processFrontier frontier distances =
 
@@ -18,7 +18,7 @@ type Distances = {
             | [] -> distances
             | _ ->
 
-                let visitedCells = frontier |> List.fold (fun state cell -> state |> List.append (grid.LinksOf cell |> List.where (fun c -> not (distances.Cells.ContainsKey c)) |> List.map (fun c -> (c, distances.[cell] + 1)))) []
+                let visitedCells = frontier |> List.fold (fun state cell -> state |> List.append (grid.LinksOf cell |> List.where (not << distances.Cells.ContainsKey) |> List.map (fun c -> (c, distances.[cell] + 1)))) []
                 let newFrontier = visitedCells |> List.map fst
                 let newDistances = {distances with Cells = distances.Cells |> Map.toList |> List.append visitedCells |> Map.ofList }
                 processFrontier newFrontier newDistances

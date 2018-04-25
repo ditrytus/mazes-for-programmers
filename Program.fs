@@ -14,7 +14,7 @@ open System
 open FSharp.Collections.ParallelSeq
 
 [<EntryPoint>]
-let main argv =
+let main _ =
 
     let height = 20
     let width = 20
@@ -37,7 +37,7 @@ let main argv =
             |> List.map (fun (name, alg) ->
                 printfn "Running %s..." name
                 let avg = {0..10}
-                        |> Seq.averageBy (fun i -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
+                        |> Seq.averageBy (fun _ -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
                 (name, avg)
                 )
             |> List.iter (fun (name, avg) ->
@@ -48,18 +48,18 @@ let main argv =
         | ConsoleKey.G ->
             Console.Clear()
             let filenamePrefix = DateTime.Now.Ticks.ToString()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             seq { 0 .. snd dist.Max - 1 } |>
                 PSeq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.R -> 
             Console.Clear()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) |> float))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.L ->
@@ -68,7 +68,7 @@ let main argv =
             maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
-            let dist = maze |> Distances.forRoot (0, 0)
+            let dist = maze |> Distances.ForRoot (0, 0)
             let path = maze |> Dijkstra.findPath dist (height - 1, width - 1)
             maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
