@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -16,6 +16,7 @@
     <Compile Include="Colors.fs" />
     <Compile Include="Distances.fs" />
     <Compile Include="Dijkstra.fs" />
+    <Compile Include="RecursiveBacktracker.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

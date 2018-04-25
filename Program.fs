@@ -9,6 +9,7 @@ open Distances
 open Dijkstra
 open AldousBroder
 open Wilson
+open RecursiveBacktracker
 open HuntAndKill
 open System
 open FSharp.Collections.ParallelSeq
@@ -22,7 +23,7 @@ let main _ =
     let grid = prepareGrid height width
 
     let rec drawNext _ =
-        let maze = grid |> huntAndKill
+        let maze = grid |> recursiveBacktracker
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
         | ConsoleKey.T ->
