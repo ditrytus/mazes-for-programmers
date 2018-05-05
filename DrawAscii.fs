@@ -5,7 +5,6 @@ open Grid
 let drawAscii contentsOf (grid:Grid) = 
 
     let drawRow (row: Cell seq) = 
-    
 
         let drawMiddle (cell:Cell) =
             contentsOf cell + (if grid.IsLinkedTo East cell then " " else "║")
@@ -17,7 +16,7 @@ let drawAscii contentsOf (grid:Grid) =
         "╬" + (row |> Seq.map drawBottom |> String.concat "") + "\n"
 
     "╬" + ("═══╬" |> String.replicate grid.ColumnsCount) + "\n" +
-    (grid.Rows |> Seq.map drawRow |> String.concat "")
+    (Grid.generateCellList grid.RowsCount grid.ColumnsCount |> Grid.rows |> Seq.map drawRow |> String.concat "")
 
 let emptyContent _ = "   "
 

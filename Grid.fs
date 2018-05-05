@@ -46,9 +46,15 @@ type Grid =
         let rnd = System.Random()
         this.Cells |> List.item (rnd.Next <| this.Size)
 
-    member this.Rows = this.Cells |> Seq.ofList |> Seq.groupBy fst |> Seq.map snd
+let rows cells = cells |> Seq.ofList |> Seq.groupBy fst |> Seq.map snd
 
-    member this.GoTo dir cell = this.Neighbourhood.[cell].[dir]
+type Grid with
+    member this.Rows = this.Cells |> rows
+
+    member this.GoTo dir cell =
+        match this.Neighbourhood.TryFind cell with
+        | Some n -> n.[dir]
+        | None -> None
 
     member this.AreLinked cellA cellB = this.Links |> List.exists (fun link -> areEqual link (cellA, cellB))
 
@@ -63,8 +69,10 @@ type Grid =
 
     member this.DeadEnds = this.Cells |> List.where (fun cell -> (this.LinksOf cell |> List.length) = 1)
 
+let generateCellList rows columns = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]
+
 let prepareGrid rows columns = 
-    let cells = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]
+    let cells = generateCellList rows columns
     let constrain = constrain columns rows
     let neighbours = cells 
                     |> List.map (
