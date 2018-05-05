@@ -104,7 +104,7 @@ let main _ =
                 ]
                 |> Array2D.map (fun v -> v > 0)
 
-            let maskedMaze = grid |> aldousBroder |> Mask.mask (Mask.fromArray sampleMask)
+            let maskedMaze = grid |> Mask.mask (Mask.fromArray sampleMask) |> wilson
             
             let dist = maskedMaze |> Distances.ForRoot (7, 7)
             maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
