@@ -49,7 +49,7 @@ let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:Grid) =
     grid.Cells |> Seq.iter drawCell
     bitmap.Save filename
 
-let colorBackground color cell = color
+let colorBackground color _ = color
 
 let whiteBackground cell = colorBackground Rgba32.White cell
 

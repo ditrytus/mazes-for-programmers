@@ -48,18 +48,18 @@ let main _ =
         | ConsoleKey.G ->
             Console.Clear()
             let filenamePrefix = DateTime.Now.Ticks.ToString()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             seq { 0 .. snd dist.Max - 1 } |>
                 PSeq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.R -> 
             Console.Clear()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) |> float))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
-            let dist = maze |> Distances.forRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot (height/2, width/2)
             maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.L ->
@@ -68,7 +68,7 @@ let main _ =
             maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
-            let dist = maze |> Distances.forRoot (0, 0)
+            let dist = maze |> Distances.ForRoot (0, 0)
             let path = maze |> Dijkstra.findPath dist (height - 1, width - 1)
             maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
@@ -106,7 +106,7 @@ let main _ =
 
             let maskedMaze = grid |> aldousBroder |> Mask.mask (Mask.fromArray sampleMask)
             
-            let dist = maskedMaze |> Distances.forRoot (7, 7)
+            let dist = maskedMaze |> Distances.ForRoot (7, 7)
             maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
 
