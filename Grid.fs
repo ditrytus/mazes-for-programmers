@@ -63,8 +63,6 @@ type Grid =
 
     member this.DeadEnds = this.Cells |> List.where (fun cell -> (this.LinksOf cell |> List.length) = 1)
 
-
-
 let prepareGrid rows columns = 
     let cells = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]
     let constrain = constrain columns rows

@@ -14,7 +14,7 @@ open System
 open FSharp.Collections.ParallelSeq
 
 [<EntryPoint>]
-let main argv =
+let main _ =
 
     let height = 20
     let width = 20
@@ -22,7 +22,7 @@ let main argv =
     let grid = prepareGrid height width
 
     let rec drawNext _ =
-        let maze = grid |> huntAndKill
+        let maze = grid |> wilson
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
         | ConsoleKey.T ->
@@ -37,7 +37,7 @@ let main argv =
             |> List.map (fun (name, alg) ->
                 printfn "Running %s..." name
                 let avg = {0..10}
-                        |> Seq.averageBy (fun i -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
+                        |> Seq.averageBy (fun _ -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
                 (name, avg)
                 )
             |> List.iter (fun (name, avg) ->
@@ -75,6 +75,41 @@ let main argv =
             Console.Clear()
             maze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
             maze |> drawAsciiEmpty |> printfn "\n%s"
+            drawNext ()
+        | ConsoleKey.M ->
+            Console.Clear()
+
+            let sampleMask =
+                array2D [
+                    [ 0; 0; 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 0; 0; 0;];
+                    [ 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 0;];
+                    [ 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0;];
+                    [ 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0;];
+                    [ 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0;];
+                    [ 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0;];
+                    [ 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1;];
+                    [ 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0;];
+                    [ 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0;];
+                    [ 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0;];
+                    [ 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0;];
+                    [ 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0;];
+                    [ 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 0;];
+                    [ 0; 0; 0; 0; 0; 0; 0; 1; 1; 1; 1; 1; 1; 0; 0; 0; 0; 0; 0; 0;];
+                ]
+                |> Array2D.map (fun v -> v > 0)
+
+            let maskedMaze = grid |> aldousBroder |> Mask.mask (Mask.fromArray sampleMask)
+            
+            let dist = maskedMaze |> Distances.forRoot (7, 7)
+            maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
+            maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
+
             drawNext ()
         | _ ->
             Console.Clear()

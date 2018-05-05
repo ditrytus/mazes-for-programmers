@@ -44,7 +44,7 @@ let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:Grid) =
             |> List.fold (fun (ctx:IImageProcessingContext<Rgba32>) points ->
                 ctx.DrawLines(Pens.Solid (Rgba32.Black, 1.0f), points)) ctx
 
-        bitmap.Mutate (fun ctx -> ctx |> drawRectangle |> drawLines |> ignore)
+        bitmap.Mutate (drawRectangle >> drawLines >> ignore)
 
     grid.Cells |> Seq.iter drawCell
     bitmap.Save filename
