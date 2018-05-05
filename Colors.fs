@@ -4,9 +4,9 @@ let hsv2rgb (h:float, s:float, v:float) =
     match v with
     | 0.0 -> (0.0, 0.0, 0.0)
     |_ ->
-        let h_q = h / 60.0
-        let i = floor h_q
-        let f = h_q - i
+        let hq = h / 60.0
+        let i = floor hq
+        let f = hq - i
         let p = v * (1.0 - s)
         let q = v * (1.0 - (s * f))
         let t = v * (1.0 - (s * (1.0 - f)))

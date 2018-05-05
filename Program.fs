@@ -9,6 +9,7 @@ open Distances
 open Dijkstra
 open AldousBroder
 open Wilson
+open RecursiveBacktracker
 open HuntAndKill
 open System
 open FSharp.Collections.ParallelSeq
@@ -22,7 +23,7 @@ let main _ =
     let grid = prepareGrid height width
 
     let rec drawNext _ =
-        let maze = grid |> wilson
+        let maze = grid |> recursiveBacktracker
         match (Console.ReadKey ()).Key with
         | ConsoleKey.Escape -> ()
         | ConsoleKey.T ->
@@ -32,7 +33,8 @@ let main _ =
                 ("Sidewinder", sidewinder);
                 ("Aldous-Broder", aldousBroder);
                 ("Wilson", wilson);
-                ("Hunt and Kill", huntAndKill)
+                ("Hunt and Kill", huntAndKill);
+                ("Recursive Backtracker", recursiveBacktracker)
             ]
             |> List.map (fun (name, alg) ->
                 printfn "Running %s..." name
@@ -65,12 +67,16 @@ let main _ =
         | ConsoleKey.L ->
             Console.Clear()
             let (dist, path) = Dijkstra.longestPath maze
-            maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
+            maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
             let dist = maze |> Distances.ForRoot (0, 0)
             let path = maze |> Dijkstra.findPath dist (height - 1, width - 1)
-            maze |> drawAscii (pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
+            maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
+        | ConsoleKey.E ->
+            Console.Clear()
+            let path = maze |> DepthFirstSearch.findPath (0, 0) (height - 1, width - 1)
+            maze |> drawAscii (Path.pathContentDistance path) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
             Console.Clear()
             maze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
@@ -104,7 +110,7 @@ let main _ =
                 ]
                 |> Array2D.map (fun v -> v > 0)
 
-            let maskedMaze = grid |> Mask.mask (Mask.fromArray sampleMask) |> wilson
+            let maskedMaze = grid |> Mask.mask (Mask.fromArray sampleMask) |> recursiveBacktracker
             
             let dist = maskedMaze |> Distances.ForRoot (7, 7)
             maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)

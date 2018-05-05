@@ -21,7 +21,7 @@ let huntAndKill (grid:Grid) =
                 let visitedNeighboursOf cell = cell |> grid.NeighboursOf |> Seq.filter isVisited
 
                 let next = unvisited
-                           |> Seq.where (fun c -> visitedNeighboursOf c |> Seq.isEmpty |> not)
+                           |> Seq.where (visitedNeighboursOf >> Seq.isEmpty >> not)
                            |> Seq.item 0
 
                 match visitedNeighboursOf next |> List.ofSeq |> randomItem with
