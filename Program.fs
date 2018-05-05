@@ -17,8 +17,8 @@ open FSharp.Collections.ParallelSeq
 [<EntryPoint>]
 let main _ =
 
-    let height = 20
-    let width = 20
+    let height = 100
+    let width = 30
 
     let grid = prepareGrid height width
 
@@ -117,6 +117,10 @@ let main _ =
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
 
             drawNext ()
+        | ConsoleKey.N ->
+            let maskedMaze = grid |> Mask.mask (MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
+            maskedMaze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
+            maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
         | _ ->
             Console.Clear()
             maze |> drawAsciiEmpty |> printfn "%s" |> drawNext

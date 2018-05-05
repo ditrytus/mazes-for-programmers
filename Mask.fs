@@ -16,6 +16,4 @@ let mask (mask:Mask) (grid:Grid) : Grid =
                         | None -> None
                         | Some cell -> if mask cell then Some cell else None )) }
 
-let x = Array2D.create 10 10 true
-
 let fromArray (array:bool[,]) (x,y) = array.[x,y]
