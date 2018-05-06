@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="GenerationAlgorithms.fs" />
+    <Compile Include="Arguments.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\mazes-core\mazes-core.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Argu" Version="5.1.0" />
   </ItemGroup>
 </Project>

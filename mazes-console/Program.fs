@@ -1,8 +1,18 @@
 ﻿open Grid
-open RecursiveBacktracker
 open DrawAscii
+open Argu
+open Arguments
 
 [<EntryPoint>]
 let main argv =
-    prepareGrid 10 10 |> recursiveBacktracker |> drawAsciiEmpty |> printfn "\n%s"
-    0 // return an integer exit code
+    try
+        let parser = ArgumentParser.Create<MainArgs>(programName = "mazes-console")
+        let args = parser.ParseCommandLine(inputs = argv, raiseOnUsage = true)
+
+        prepareGrid (args.GetResult Height) (args.GetResult Width)
+            |> GenerationAlgorithms.apply (args.GetResult Algorithm)
+            |> drawAsciiEmpty
+            |> printfn "\n%s"
+    with e ->
+        printfn "%s" e.Message
+    0
