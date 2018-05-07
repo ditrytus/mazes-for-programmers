@@ -2,6 +2,8 @@
 open DrawAscii
 open Argu
 open Arguments
+open MaskPng
+open Mask
 
 [<EntryPoint>]
 let main argv =
@@ -9,8 +11,14 @@ let main argv =
         let parser = ArgumentParser.Create<MainArgs>(programName = "mazes-console")
         let args = parser.ParseCommandLine(inputs = argv, raiseOnUsage = true)
 
-        prepareGrid (args.GetResult Height) (args.GetResult Width)
-            |> GenerationAlgorithms.apply (args.GetResult Algorithm)
+        let emptyGrid = prepareGrid (args.GetResult Height) (args.GetResult Width)
+        
+        let maskedGrid =
+            match args.TryGetResult Mask with
+            | Some mask -> emptyGrid |> Mask.mask (MaskPng.fromPngFile mask)
+            | None -> emptyGrid
+
+        maskedGrid |> GenerationAlgorithms.apply (args.GetResult Algorithm)
             |> drawAsciiEmpty
             |> printfn "\n%s"
     with e ->

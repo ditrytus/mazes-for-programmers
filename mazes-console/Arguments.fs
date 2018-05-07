@@ -62,9 +62,10 @@ with
             | CellWidth _ -> "Width of printed cell in characters."
 
 type MainArgs =
-    | [<Mandatory; Unique>] Height of int
-    | [<Mandatory; Unique>] Width of int
-    | [<Mandatory; Unique>] Algorithm of GenerationAlgorithm
+    | [<Mandatory; Unique; AltCommandLine("-h")>] Height of int
+    | [<Mandatory; Unique; AltCommandLine("-w")>] Width of int
+    | [<Mandatory; Unique; AltCommandLine("-a")>] Algorithm of GenerationAlgorithm
+    | [<Unique; AltCommandLine("-m")>] Mask of string
     //| PrintAscii of ParseResults<PrintAsciiArgs>
 with
     interface IArgParserTemplate with
@@ -73,4 +74,5 @@ with
             | Height _ -> "Height of maze in cells."
             | Width _ -> "Width of maze in cells."
             | Algorithm _ -> "Algorithm which will be used to generate a maze."
+            | Mask _ -> "Path to monochromatic PNG file that will be used as mazes mask where one pixels are mapped to maze's cells. Black color indicates that a pixel should be part of the maze."
             //| PrintAscii _ -> "Prints an ASCII art representation of a generated maze."
