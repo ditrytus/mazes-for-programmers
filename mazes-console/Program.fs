@@ -2,8 +2,6 @@
 open DrawAscii
 open Argu
 open Arguments
-open MaskPng
-open Mask
 
 [<EntryPoint>]
 let main argv =

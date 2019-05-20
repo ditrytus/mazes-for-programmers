@@ -6,7 +6,6 @@ open Sidewinder
 open DrawAscii
 open DrawPng
 open Distances
-open Dijkstra
 open AldousBroder
 open Wilson
 open RecursiveBacktracker
@@ -17,8 +16,8 @@ open FSharp.Collections.ParallelSeq
 [<EntryPoint>]
 let main _ =
 
-    let height = 100
-    let width = 30
+    let height = 20
+    let width = 20
 
     let grid = prepareGrid height width
 
@@ -114,9 +113,7 @@ let main _ =
             
             let dist = maskedMaze |> Distances.ForRoot (7, 7)
             maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
-            maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
-
-            drawNext ()
+            maskedMaze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.N ->
             let maskedMaze = grid |> Mask.mask (MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
             maskedMaze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
