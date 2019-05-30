@@ -1,4 +1,4 @@
-﻿module DrawPng
+﻿module DrawPngRegular
 
 open Grid
 open SixLabors.Primitives
@@ -8,7 +8,7 @@ open SixLabors.ImageSharp.Processing
 open SixLabors.ImageSharp.Processing.Drawing
 open SixLabors.ImageSharp.Processing.Drawing.Pens
 
-let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:Grid) =
+let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:RegularGrid) =
     use bitmap = new Image<Rgba32>(grid.ColumnsCount * cellSize, grid.RowsCount * cellSize)
     let drawCell (x, y) =
 
@@ -30,7 +30,7 @@ let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:Grid) =
                     ]
                     |> Map.ofList
 
-        let linesToDraw = Direction.All
+        let linesToDraw = RegularDirection.All
                         |> List.where (fun dir -> grid.IsLinkedTo dir (x, y) |> not)
                         |> List.map (fun dir -> walls.[dir])
         
@@ -53,4 +53,4 @@ let colorBackground color _ = color
 
 let whiteBackground cell = colorBackground Rgba32.White cell
 
-let drawWhitePng filename cellSize (grid:Grid) = drawPng filename cellSize whiteBackground grid
+let drawWhitePng filename cellSize (grid:RegularGrid) = drawPng filename cellSize whiteBackground grid

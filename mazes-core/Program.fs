@@ -4,7 +4,7 @@ open Grid
 open BinaryTree
 open Sidewinder
 open DrawAscii
-open DrawPng
+open DrawPngRegular
 open Distances
 open AldousBroder
 open Wilson
@@ -19,7 +19,7 @@ let main _ =
     let height = 20
     let width = 20
 
-    let grid = prepareGrid height width
+    let grid = prepareRegularGrid height width
 
     let rec drawNext _ =
         let maze = grid |> recursiveBacktracker
@@ -38,7 +38,7 @@ let main _ =
             |> List.map (fun (name, alg) ->
                 printfn "Running %s..." name
                 let avg = {0..10}
-                        |> Seq.averageBy (fun _ -> (prepareGrid height width |> alg ).DeadEnds |> List.length |> float)
+                        |> Seq.averageBy (fun _ -> (prepareRegularGrid height width |> alg ).DeadEnds |> List.length |> float)
                 (name, avg)
                 )
             |> List.iter (fun (name, avg) ->

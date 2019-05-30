@@ -14,7 +14,7 @@ type GenerationAlgorithm =
     | HuntAndKill = 4
     | RecursiveBacktracker = 5
 
-let apply (algorithm:GenerationAlgorithm) : Grid -> Grid =
+let apply (algorithm:GenerationAlgorithm) : RegularGrid -> RegularGrid =
     match algorithm with
     | GenerationAlgorithm.Sidewinder -> sidewinder
     | GenerationAlgorithm.AldousBroder -> aldousBroder

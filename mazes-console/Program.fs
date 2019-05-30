@@ -9,7 +9,7 @@ let main argv =
         let parser = ArgumentParser.Create<MainArgs>(programName = "mazes-console")
         let args = parser.ParseCommandLine(inputs = argv, raiseOnUsage = true)
 
-        let emptyGrid = prepareGrid (args.GetResult Height) (args.GetResult Width)
+        let emptyGrid = prepareRegularGrid (args.GetResult Height) (args.GetResult Width)
         
         let maskedGrid =
             match args.TryGetResult Mask with

@@ -2,7 +2,7 @@
 
 open Grid
 
-let drawAscii contentsOf (grid:Grid) = 
+let drawAscii contentsOf (grid:RegularGrid) = 
 
     let drawRow (row: Cell seq) = 
 
