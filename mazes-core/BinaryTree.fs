@@ -3,9 +3,9 @@ module BinaryTree
 open Grid
 open Utils
 
-let binaryTree (grid:Grid) =
+let binaryTree (grid:Grid<_>) =
 
-    let linkNeighbour (grid:Grid) cell =
+    let linkNeighbour (grid:Grid<_>) cell =
 
         let neighbours c =
             [North; East] 

@@ -3,9 +3,9 @@
 open Grid
 open Utils
 
-let huntAndKill (grid:Grid) = 
+let huntAndKill (grid:Grid<_>) = 
 
-    let rec processStep (unvisited:Cell list) cell (grid:Grid) =
+    let rec processStep (unvisited:Cell list) cell (grid:Grid<_>) =
 
         match unvisited with
         | [] -> grid

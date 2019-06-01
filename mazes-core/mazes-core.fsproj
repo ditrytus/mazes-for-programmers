@@ -15,6 +15,7 @@
     <Compile Include="HuntAndKill.fs" />
     <Compile Include="DrawAscii.fs" />
     <Compile Include="DrawPngRegular.fs" />
+    <Compile Include="DrawPngPolar.fs" />
     <Compile Include="Colors.fs" />
     <Compile Include="Path.fs" />
     <Compile Include="Distances.fs" />

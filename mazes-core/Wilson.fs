@@ -3,9 +3,9 @@
 open Grid
 open Utils
 
-let wilson (grid:Grid) =
+let wilson (grid:Grid<_>) =
 
-    let rec processPath unvisited path (grid:Grid) =
+    let rec processPath unvisited path (grid:Grid<_>) =
 
         match unvisited |> List.isEmpty with
         | true -> grid
@@ -17,7 +17,7 @@ let wilson (grid:Grid) =
 
                 match unvisited |> List.contains head with
                 | false -> tail
-                           |> List.fold (fun (g:Grid, c) cell -> (g.Link c cell, cell)) (grid, head)
+                           |> List.fold (fun (g:Grid<_>, c) cell -> (g.Link c cell, cell)) (grid, head)
                            |> fst
                            |> processPath (unvisited |> List.except (path |> Seq.ofList)) [grid.RandomCell]
                 | true -> 

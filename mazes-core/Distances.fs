@@ -10,7 +10,7 @@ type Distances = {
 
     } with
 
-    static member ForRoot root (grid:Grid) =
+    static member ForRoot root (grid:Grid<_>) =
 
         let rec processFrontier frontier distances =
 

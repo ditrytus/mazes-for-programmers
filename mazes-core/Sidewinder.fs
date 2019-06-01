@@ -3,11 +3,11 @@
 open Grid
 open Utils
 
-let sidewinder (grid:Grid) =
+let sidewinder (grid:Grid<_>) =
 
     let rand = System.Random ();
     
-    let rec processRow (currentRun : Cell list) (remaining : Cell list) (grid : Grid) =
+    let rec processRow (currentRun : Cell list) (remaining : Cell list) (grid : Grid<_>) =
 
         match remaining with
         | [] -> grid
@@ -15,7 +15,7 @@ let sidewinder (grid:Grid) =
 
             let newRun = currentCell::currentRun
 
-            let carveNorth noNorth (grid:Grid) =
+            let carveNorth noNorth (grid:Grid<_>) =
 
                 match randomItem newRun with
                 | None -> grid
@@ -30,7 +30,7 @@ let sidewinder (grid:Grid) =
 
             | nextCell::_ ->
 
-                let carveEast (grid:Grid) = (grid.Link currentCell nextCell) |> processRow newRun rest
+                let carveEast (grid:Grid<_>) = (grid.Link currentCell nextCell) |> processRow newRun rest
 
                 match rand.Next(2) with
                 | 0 -> carveNorth carveEast grid

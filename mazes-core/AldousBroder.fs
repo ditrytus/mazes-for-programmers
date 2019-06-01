@@ -3,9 +3,9 @@
 open Grid
 open Utils
 
-let aldousBroder (grid:Grid) = 
+let aldousBroder (grid:Grid<_>) = 
 
-    let rec processSetp cell left (grid:Grid) =
+    let rec processSetp cell left (grid:Grid<_>) =
 
         match left with
         | 0 -> grid

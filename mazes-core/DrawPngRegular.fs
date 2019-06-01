@@ -8,12 +8,13 @@ open SixLabors.ImageSharp.Processing
 open SixLabors.ImageSharp.Processing.Drawing
 open SixLabors.ImageSharp.Processing.Drawing.Pens
 
-let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:RegularGrid) =
+let drawPngRegular filename cellSize (cellColor:Cell->Rgba32) (grid:RegularGrid) =
     use bitmap = new Image<Rgba32>(grid.ColumnsCount * cellSize, grid.RowsCount * cellSize)
-    let drawCell (x, y) =
-
+    let drawCell cell =
+        let {Row=row; Column=col} = cell
+        
         let cellSizeF = float32 cellSize
-        let xf, yf = float32 x, float32 y
+        let xf, yf = float32 row, float32 col
 
         let nwCorner = PointF (yf * cellSizeF, xf * cellSizeF)
         let neCorner = PointF ((yf + 1.0f) * cellSizeF, xf * cellSizeF)
@@ -31,12 +32,12 @@ let drawPng filename cellSize (cellColor:Cell->Rgba32) (grid:RegularGrid) =
                     |> Map.ofList
 
         let linesToDraw = RegularDirection.All
-                        |> List.where (fun dir -> grid.IsLinkedTo dir (x, y) |> not)
+                        |> List.where (fun dir -> grid.IsLinkedTo dir cell |> not)
                         |> List.map (fun dir -> walls.[dir])
         
         let drawRectangle (ctx:IImageProcessingContext<Rgba32>) =
             ctx.FillPolygon (
-                Brushes.Brushes.Solid (cellColor (x, y)),
+                Brushes.Brushes.Solid (cellColor cell),
                 [|nwCorner; neCorner; seCorner; swCorner|])
 
         let drawLines (ctx:IImageProcessingContext<Rgba32>) =
@@ -53,4 +54,4 @@ let colorBackground color _ = color
 
 let whiteBackground cell = colorBackground Rgba32.White cell
 
-let drawWhitePng filename cellSize (grid:RegularGrid) = drawPng filename cellSize whiteBackground grid
+let drawWhitePngRegular filename cellSize (grid:RegularGrid) = drawPngRegular filename cellSize whiteBackground grid

@@ -2,7 +2,7 @@ module DepthFirstSearch
 
 open Grid
 
-let findPath (start:Cell) (goal:Cell) (grid:Grid) =
+let findPath (start:Cell) (goal:Cell) (grid:Grid<_>) =
 
     let rec findPathRec (stack):Cell list Option =
 

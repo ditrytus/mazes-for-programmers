@@ -2,9 +2,9 @@ module RecursiveBacktracker
 
 open Grid
 
-let recursiveBacktracker (grid:Grid):Grid =
+let recursiveBacktracker (grid:Grid<_>):Grid<_> =
 
-    let rec carvePath (stack:Cell list) (visited:Cell list) (grid:Grid) =
+    let rec carvePath (stack:Cell list) (visited:Cell list) (grid:Grid<_>) =
 
         match stack with
         | [] -> grid

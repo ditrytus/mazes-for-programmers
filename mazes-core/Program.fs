@@ -7,6 +7,7 @@ open DrawAscii
 open DrawPngRegular
 open Distances
 open AldousBroder
+open DrawPngPolar
 open Wilson
 open RecursiveBacktracker
 open HuntAndKill
@@ -49,19 +50,19 @@ let main _ =
         | ConsoleKey.G ->
             Console.Clear()
             let filenamePrefix = DateTime.Now.Ticks.ToString()
-            let dist = maze |> Distances.ForRoot (height/2, width/2)
+            let dist = maze |> Distances.ForRoot {Row=height/2; Column=width/2}
             seq { 0 .. snd dist.Max - 1 } |>
-                PSeq.iter (fun i -> maze |> drawPng (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
+                PSeq.iter (fun i -> maze |> drawPngRegular (sprintf "%s_%04i.png" filenamePrefix i) 10 (rainbowShadeWithShift dist ((snd dist.Max / 2) |> float) i))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.R -> 
             Console.Clear()
-            let dist = maze |> Distances.ForRoot (height/2, width/2)
-            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) |> float))
+            let dist = maze |> Distances.ForRoot {Row=height/2; Column=width/2}
+            maze |> drawPngRegular (DateTime.Now.Ticks.ToString() + ".png") 10 (rainbowShade dist ((snd dist.Max) |> float))
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.C ->
             Console.Clear()
-            let dist = maze |> Distances.ForRoot (height/2, width/2)
-            maze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
+            let dist = maze |> Distances.ForRoot {Row=height/2; Column=width/2}
+            maze |> drawPngRegular (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.L ->
             Console.Clear()
@@ -69,16 +70,16 @@ let main _ =
             maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
-            let dist = maze |> Distances.ForRoot (0, 0)
-            let path = maze |> Dijkstra.findPath dist (height - 1, width - 1)
+            let dist = maze |> Distances.ForRoot {Row=0; Column=0}
+            let path = maze |> Dijkstra.findPath dist {Row=height-1; Column=width-1}
             maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.E ->
             Console.Clear()
-            let path = maze |> DepthFirstSearch.findPath (0, 0) (height - 1, width - 1)
+            let path = maze |> DepthFirstSearch.findPath {Row=0; Column=0} {Row=height-1; Column=width-1}
             maze |> drawAscii (Path.pathContentDistance path) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
             Console.Clear()
-            maze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
+            maze |> drawWhitePngRegular (DateTime.Now.Ticks.ToString() + ".png") 10
             maze |> drawAsciiEmpty |> printfn "\n%s"
             drawNext ()
         | ConsoleKey.M ->
@@ -111,13 +112,15 @@ let main _ =
 
             let maskedMaze = grid |> Mask.mask (Mask.fromArray sampleMask) |> recursiveBacktracker
             
-            let dist = maskedMaze |> Distances.ForRoot (7, 7)
-            maskedMaze |> drawPng (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
+            let dist = maskedMaze |> Distances.ForRoot {Row=7; Column=7}
+            maskedMaze |> drawPngRegular (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.N ->
             let maskedMaze = grid |> Mask.mask (MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
-            maskedMaze |> drawWhitePng (DateTime.Now.Ticks.ToString() + ".png") 10
+            maskedMaze |> drawWhitePngRegular (DateTime.Now.Ticks.ToString() + ".png") 10
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
+        | ConsoleKey.P ->
+            preparePolarGrid height width |> recursiveBacktracker |> drawWhitePngPolar (DateTime.Now.Ticks.ToString() + ".png") 10
         | _ ->
             Console.Clear()
             maze |> drawAsciiEmpty |> printfn "%s" |> drawNext

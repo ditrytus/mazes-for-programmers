@@ -3,7 +3,15 @@ module Grid
 module Range =
     let contains x (min, max) = min <= x && x <= max
 
-type Cell = int * int
+type Cell = {Row:int; Column:int}
+
+let row cell = cell.Row
+
+let column cell = cell.Column
+
+let toCell (a, b) = {Row=a; Column=b}
+
+let makeCell row column = {Row=row; Column=column}
 
 type Link = Cell * Cell
 
@@ -44,7 +52,7 @@ type Grid<'d when 'd : comparison> =
         let rnd = System.Random()
         this.Cells |> List.item (rnd.Next <| this.Size)
 
-let rows cells = cells |> Seq.ofList |> Seq.groupBy fst |> Seq.map snd
+let rows cells = cells  |> List.groupBy row |> List.map snd
 
 type Grid<'d when 'd : comparison> with
     member this.Rows = this.Cells |> rows
@@ -70,12 +78,12 @@ type Grid<'d when 'd : comparison> with
 type RegularGrid = Grid<RegularDirection>
 type PolarGrid = Grid<PolarDirection>
 
-let generateCellList rows columns = [for i in 0..rows-1 do for j in 0..columns-1 -> i, j]
+let generateCellList rows columns = [for i in 0..rows-1 do for j in 0..columns-1 -> (i, j) |> toCell]
 
-let constrain width height (row, column) =
+let constrain width height cell =
     let horizontal = (0, (width-1))
     let vertical = (0, (height-1))
-    if (vertical |> Range.contains row) && (horizontal |> Range.contains column) then Some (row, column) else None
+    if (vertical |> Range.contains cell.Row) && (horizontal |> Range.contains cell.Column) then Some cell else None
     
 let prepareGrid neighboursForCell rows columns  : Grid<'d> =
     let cells = generateCellList rows columns    
@@ -83,25 +91,25 @@ let prepareGrid neighboursForCell rows columns  : Grid<'d> =
     {Cells = cells; Links = []; Neighbourhood = neighbours; ColumnsCount = columns; RowsCount = rows; }
 
 let prepareRegularGrid rows columns : RegularGrid =
-    let neighboursForCell = fun (row, col) ->
+    let neighboursForCell = fun cell ->
         let constrain = constrain columns rows
-        (row, col),
+        cell,
         [
-            North, constrain (row-1, col);
-            South, constrain (row+1, col);
-            East, constrain (row, col+1);
-            West, constrain (row, col-1)
+            North, constrain {cell with Row = cell.Row-1};//(row-1, col);
+            South, constrain {cell with Row = cell.Row+1};//(row+1, col);
+            East, constrain {cell with Column = cell.Column+1};//(row, col+1);
+            West, constrain {cell with Column = cell.Column-1};//(row, col-1)
         ] |> Map.ofList
     prepareGrid neighboursForCell rows columns
     
 let preparePolarGrid rows columns : PolarGrid =
-    let neighboursForCell = fun (row, col) ->
+    let neighboursForCell = fun cell ->
         let constrain = constrain columns rows
-        (row, col),
+        cell,
         [
-            In, constrain (row-1, col);
-            Out, constrain (row+1, col);
-            Clockwise, constrain (row, col+1);
-            CounterClockwise, constrain (row, col-1)
+            In, constrain {cell with Row = cell.Row-1};
+            Out, constrain {cell with Row = cell.Row+1};
+            Clockwise, constrain {cell with Column = cell.Column+1};
+            CounterClockwise, constrain {cell with Column = cell.Column-1};
         ] |> Map.ofList
     prepareGrid neighboursForCell rows columns
