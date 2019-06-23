@@ -1,32 +1,34 @@
-﻿module HuntAndKill
+﻿namespace Mazes.Core
 
-open Grid
-open Utils
+module HuntAndKill = 
 
-let huntAndKill (grid:Grid<_>) = 
+    open Grid
+    open Utils
 
-    let rec processStep (unvisited:Cell list) cell (grid:Grid<_>) =
+    let huntAndKill (grid:Grid<_>) = 
 
-        match unvisited with
-        | [] -> grid
-        | _ ->
+        let rec processStep (unvisited:Cell list) cell (grid:Grid<_>) =
 
-            let processNextStep next = processStep (unvisited |> List.except [next]) next
+            match unvisited with
+            | [] -> grid
+            | _ ->
 
-            match grid.NeighboursOf cell |> Set.ofList |> Set.intersect (unvisited |> Set.ofList) |> Set.toList |> randomItem with
-            | Some next -> grid.Link cell next |> processNextStep next
-            | None -> 
+                let processNextStep next = processStep (unvisited |> List.except [next]) next
 
-                let isVisited cell = unvisited |> Seq.contains cell |> not
-                let visitedNeighboursOf cell = cell |> grid.NeighboursOf |> Seq.filter isVisited
+                match grid.NeighboursOf cell |> Set.ofList |> Set.intersect (unvisited |> Set.ofList) |> Set.toList |> randomItem with
+                | Some next -> grid.Link cell next |> processNextStep next
+                | None -> 
 
-                let next = unvisited
-                           |> Seq.where (visitedNeighboursOf >> Seq.isEmpty >> not)
-                           |> Seq.item 0
+                    let isVisited cell = unvisited |> Seq.contains cell |> not
+                    let visitedNeighboursOf cell = cell |> grid.NeighboursOf |> Seq.filter isVisited
 
-                match visitedNeighboursOf next |> List.ofSeq |> randomItem with
-                | None -> failwith "There can not be no visited neighbours because it was checked before."
-                | Some neighbour -> grid.Link next neighbour |> processNextStep next
+                    let next = unvisited
+                               |> Seq.where (visitedNeighboursOf >> Seq.isEmpty >> not)
+                               |> Seq.item 0
 
-    let randomCell = grid.RandomCell
-    grid |> processStep (grid.Cells |> List.except [randomCell]) randomCell
+                    match visitedNeighboursOf next |> List.ofSeq |> randomItem with
+                    | None -> failwith "There can not be no visited neighbours because it was checked before."
+                    | Some neighbour -> grid.Link next neighbour |> processNextStep next
+
+        let randomCell = grid.RandomCell
+        grid |> processStep (grid.Cells |> List.except [randomCell]) randomCell

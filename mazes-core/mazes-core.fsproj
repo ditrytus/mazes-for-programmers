@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DrawSvgRegular.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="Mask.fs" />
@@ -14,7 +13,8 @@
     <Compile Include="AldousBroder.fs" />
     <Compile Include="Wilson.fs" />
     <Compile Include="HuntAndKill.fs" />
-    <Compile Include="DrawAscii.fs" />
+    <Compile Include="DrawCommons.fs" />
+    <Compile Include="DrawAsciiRegular.fs" />
     <Compile Include="DrawPngRegular.fs" />
     <Compile Include="DrawPngPolar.fs" />
     <Compile Include="Colors.fs" />

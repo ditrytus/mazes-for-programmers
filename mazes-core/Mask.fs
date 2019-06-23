@@ -1,19 +1,21 @@
-module Mask
+namespace Mazes.Core
 
-open Grid
+module Mask =
 
-type Mask = Cell -> bool
+    open Grid
 
-let mask (mask:Mask) (grid:Grid<'d>) : Grid<'d> =
-    { grid with
-            Cells = grid.Cells |> List.where mask;
-            Neighbourhood = grid.Neighbourhood
-                |> Map.filter (fun cell _ -> mask cell)
-                |> Map.map (fun _ dirMap ->
-                    dirMap
-                    |> Map.map (fun _ cell ->
-                        match cell with
-                        | None -> None
-                        | Some cell -> if mask cell then Some cell else None )) }
+    type Mask = Cell -> bool
 
-let fromArray (array:bool[,]) {Row=row;Column=col} = array.[row,col]
+    let mask (mask:Mask) (grid:Grid<'d>) : Grid<'d> =
+        { grid with
+                Cells = grid.Cells |> List.where mask;
+                Neighbourhood = grid.Neighbourhood
+                    |> Map.filter (fun cell _ -> mask cell)
+                    |> Map.map (fun _ dirMap ->
+                        dirMap
+                        |> Map.map (fun _ cell ->
+                            match cell with
+                            | None -> None
+                            | Some cell -> if mask cell then Some cell else None )) }
+
+    let fromArray (array:bool[,]) {Row=row;Column=col} = array.[row,col]

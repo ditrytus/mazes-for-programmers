@@ -1,20 +1,22 @@
-﻿module AldousBroder
+﻿namespace Mazes.Core
 
-open Grid
-open Utils
+module AldousBroder =
 
-let aldousBroder (grid:Grid<_>) = 
+    open Grid
+    open Utils
 
-    let rec processSetp cell left (grid:Grid<_>) =
+    let aldousBroder (grid:Grid<_>) =
 
-        match left with
-        | 0 -> grid
-        | _ -> 
+        let rec processSetp cell left (grid:Grid<_>) =
 
-            match grid.NeighboursOf cell |> randomItem with
-            | None -> failwith "Cell has no neighbours!"
+            match left with
+            | 0 -> grid
+            | _ ->
 
-            | Some next when grid.LinksOf next |> List.isEmpty -> grid.Link cell next |> processSetp next (left-1)
-            | Some next -> grid |> processSetp next left
+                match grid.NeighboursOf cell |> randomItem with
+                | None -> failwith "Cell has no neighbours!"
 
-    grid |> processSetp grid.RandomCell (grid.Size-1)
+                | Some next when grid.LinksOf next |> List.isEmpty -> grid.Link cell next |> processSetp next (left-1)
+                | Some next -> grid |> processSetp next left
+
+        grid |> processSetp grid.RandomCell (grid.Size-1)

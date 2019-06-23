@@ -1,16 +1,15 @@
-﻿// Learn more about F# at http://fsharp.org
-
-open Grid
-open BinaryTree
-open Sidewinder
-open DrawAscii
-open Draw.DrawPngRegular
-open Distances
-open AldousBroder
-open DrawPngPolar
-open Wilson
-open RecursiveBacktracker
-open HuntAndKill
+﻿open Mazes.Core.Grid
+open Mazes.Core.Mask
+open Mazes.Core.BinaryTree
+open Mazes.Core.Sidewinder
+open Mazes.Core.Draw.AsciiRegular
+open Mazes.Core.Draw.PngRegular
+open Mazes.Core.Distances
+open Mazes.Core.AldousBroder
+open Mazes.Core.Draw.PngPolar
+open Mazes.Core.Wilson
+open Mazes.Core.RecursiveBacktracker
+open Mazes.Core.HuntAndKill
 open System
 open FSharp.Collections.ParallelSeq
 
@@ -66,17 +65,17 @@ let main _ =
             maze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.L ->
             Console.Clear()
-            let (dist, path) = Dijkstra.longestPath maze
-            maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
+            let (dist, path) = Mazes.Core.Dijkstra.longestPath maze
+            maze |> drawAscii (Mazes.Core.Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.D ->
             Console.Clear()
             let dist = maze |> Distances.ForRoot {Row=0; Column=0}
-            let path = maze |> Dijkstra.findPath dist {Row=height-1; Column=width-1}
-            maze |> drawAscii (Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
+            let path = maze |> Mazes.Core.Dijkstra.findPath dist {Row=height-1; Column=width-1}
+            maze |> drawAscii (Mazes.Core.Path.pathContent path (dist |> distancesContent)) |> printfn "\n%s" |> drawNext
         | ConsoleKey.E ->
             Console.Clear()
-            let path = maze |> DepthFirstSearch.findPath {Row=0; Column=0} {Row=height-1; Column=width-1}
-            maze |> drawAscii (Path.pathContentDistance path) |> printfn "\n%s" |> drawNext
+            let path = maze |> Mazes.Core.DepthFirstSearch.findPath {Row=0; Column=0} {Row=height-1; Column=width-1}
+            maze |> drawAscii (Mazes.Core.Path.pathContentDistance path) |> printfn "\n%s" |> drawNext
         | ConsoleKey.S ->
             Console.Clear()
             maze |> drawWhitePngRegular (DateTime.Now.Ticks.ToString() + ".png") 10
@@ -110,13 +109,13 @@ let main _ =
                 ]
                 |> Array2D.map (fun v -> v > 0)
 
-            let maskedMaze = grid |> Mask.mask (Mask.fromArray sampleMask) |> recursiveBacktracker
+            let maskedMaze = grid |> Mazes.Core.Mask.mask (Mazes.Core.Mask.fromArray sampleMask) |> recursiveBacktracker
             
             let dist = maskedMaze |> Distances.ForRoot {Row=7; Column=7}
             maskedMaze |> drawPngRegular (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.N ->
-            let maskedMaze = grid |> Mask.mask (MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
+            let maskedMaze = grid |> Mazes.Core.Mask.mask (Mazes.Core.MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
             maskedMaze |> drawWhitePngRegular (DateTime.Now.Ticks.ToString() + ".png") 10
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
         | ConsoleKey.P ->

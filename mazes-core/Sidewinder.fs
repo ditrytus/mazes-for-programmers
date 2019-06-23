@@ -1,39 +1,41 @@
-﻿module Sidewinder
+﻿namespace Mazes.Core
 
-open Grid
-open Utils
+module Sidewinder =
 
-let sidewinder (grid:Grid<_>) =
+    open Grid
+    open Utils
 
-    let rand = System.Random ();
-    
-    let rec processRow (currentRun : Cell list) (remaining : Cell list) (grid : Grid<_>) =
+    let sidewinder (grid:Grid<_>) =
 
-        match remaining with
-        | [] -> grid
-        | currentCell::rest ->
+        let rand = System.Random ();
+        
+        let rec processRow (currentRun : Cell list) (remaining : Cell list) (grid : Grid<_>) =
 
-            let newRun = currentCell::currentRun
+            match remaining with
+            | [] -> grid
+            | currentCell::rest ->
 
-            let carveNorth noNorth (grid:Grid<_>) =
+                let newRun = currentCell::currentRun
 
-                match randomItem newRun with
-                | None -> grid
-                | Some randomCell ->
+                let carveNorth noNorth (grid:Grid<_>) =
 
-                    match randomCell |> grid.GoTo North with
-                    | None -> noNorth grid
-                    | Some northCell -> grid.Link randomCell northCell |> processRow [] rest
+                    match randomItem newRun with
+                    | None -> grid
+                    | Some randomCell ->
 
-            match rest with
-            | [] -> carveNorth id grid
+                        match randomCell |> grid.GoTo North with
+                        | None -> noNorth grid
+                        | Some northCell -> grid.Link randomCell northCell |> processRow [] rest
 
-            | nextCell::_ ->
+                match rest with
+                | [] -> carveNorth id grid
 
-                let carveEast (grid:Grid<_>) = (grid.Link currentCell nextCell) |> processRow newRun rest
+                | nextCell::_ ->
 
-                match rand.Next(2) with
-                | 0 -> carveNorth carveEast grid
-                | _ -> carveEast grid
-                        
-    grid.Rows |> Seq.fold (fun grid row -> grid |> processRow [] (row |> List.ofSeq)) grid
+                    let carveEast (grid:Grid<_>) = (grid.Link currentCell nextCell) |> processRow newRun rest
+
+                    match rand.Next(2) with
+                    | 0 -> carveNorth carveEast grid
+                    | _ -> carveEast grid
+                            
+        grid.Rows |> Seq.fold (fun grid row -> grid |> processRow [] (row |> List.ofSeq)) grid

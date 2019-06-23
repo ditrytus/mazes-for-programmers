@@ -1,18 +1,20 @@
-module RecursiveBacktracker
+namespace Mazes.Core
 
-open Grid
+module RecursiveBacktracker =
 
-let recursiveBacktracker (grid:Grid<_>):Grid<_> =
+    open Grid
 
-    let rec carvePath (stack:Cell list) (visited:Cell list) (grid:Grid<_>) =
+    let recursiveBacktracker (grid:Grid<_>):Grid<_> =
 
-        match stack with
-        | [] -> grid
-        | head::tail ->
+        let rec carvePath (stack:Cell list) (visited:Cell list) (grid:Grid<_>) =
 
-            match head |> grid.NeighboursOf |> List.except (Seq.ofList visited) |> Utils.randomItem with
-            | None -> grid |> carvePath tail visited
-            | Some cell -> grid.Link head cell |> carvePath (cell::stack) (cell::visited)
+            match stack with
+            | [] -> grid
+            | head::tail ->
 
-    let randomCell = grid.RandomCell
-    grid |> carvePath [randomCell] [randomCell]
+                match head |> grid.NeighboursOf |> List.except (Seq.ofList visited) |> Utils.randomItem with
+                | None -> grid |> carvePath tail visited
+                | Some cell -> grid.Link head cell |> carvePath (cell::stack) (cell::visited)
+
+        let randomCell = grid.RandomCell
+        grid |> carvePath [randomCell] [randomCell]

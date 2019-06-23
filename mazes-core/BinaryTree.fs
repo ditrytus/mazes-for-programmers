@@ -1,19 +1,21 @@
-module BinaryTree
+namespace Mazes.Core
 
-open Grid
-open Utils
+module BinaryTree = 
 
-let binaryTree (grid:Grid<_>) =
+    open Grid
+    open Utils
 
-    let linkNeighbour (grid:Grid<_>) cell =
+    let binaryTree (grid:Grid<_>) =
 
-        let neighbours c =
-            [North; East] 
-            |> List.map (fun dir -> c |> grid.GoTo dir) 
-            |> List.choose id
+        let linkNeighbour (grid:Grid<_>) cell =
 
-        match cell |> neighbours |> randomItem with
-        | Some neighbour ->  grid.Link cell neighbour
-        | None -> grid
+            let neighbours c =
+                [North; East] 
+                |> List.map (fun dir -> c |> grid.GoTo dir) 
+                |> List.choose id
 
-    grid.Cells |> List.fold linkNeighbour grid 
+            match cell |> neighbours |> randomItem with
+            | Some neighbour ->  grid.Link cell neighbour
+            | None -> grid
+
+        grid.Cells |> List.fold linkNeighbour grid 

@@ -1,30 +1,32 @@
-module DepthFirstSearch
+namespace Mazes.Core
 
-open Grid
+module DepthFirstSearch =
 
-let findPath (start:Cell) (goal:Cell) (grid:Grid<_>) =
+    open Grid
 
-    let rec findPathRec (stack):Cell list Option =
+    let findPath (start:Cell) (goal:Cell) (grid:Grid<_>) =
 
-        match stack  with
-        | [] -> failwith "Stack should never be empty!"
-        | head::tail ->
+        let rec findPathRec (stack):Cell list Option =
 
-            match head with
-            | h when h = goal -> head::tail |> Some
-            | _ ->
-                
-                match head |> grid.LinksOf |> List.except (Seq.ofList tail) with
-                | [] -> None
-                | links ->
+            match stack  with
+            | [] -> failwith "Stack should never be empty!"
+            | head::tail ->
 
-                    let linksFold result link = 
-                        match result with
-                        | None -> findPathRec (link::stack)
-                        | path -> path 
+                match head with
+                | h when h = goal -> head::tail |> Some
+                | _ ->
+                    
+                    match head |> grid.LinksOf |> List.except (Seq.ofList tail) with
+                    | [] -> None
+                    | links ->
 
-                    links |> List.fold linksFold None
+                        let linksFold result link = 
+                            match result with
+                            | None -> findPathRec (link::stack)
+                            | path -> path 
 
-    match findPathRec [start] with
-    | None -> []
-    | Some path -> path
+                        links |> List.fold linksFold None
+
+        match findPathRec [start] with
+        | None -> []
+        | Some path -> path
