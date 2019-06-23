@@ -4,7 +4,7 @@ open Grid
 open BinaryTree
 open Sidewinder
 open DrawAscii
-open DrawPngRegular
+open Draw.DrawPngRegular
 open Distances
 open AldousBroder
 open DrawPngPolar

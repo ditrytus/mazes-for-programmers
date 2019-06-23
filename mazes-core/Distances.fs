@@ -1,7 +1,7 @@
 ﻿module Distances
 
+open Draw.Commons
 open Grid
-open SixLabors.ImageSharp.PixelFormats
 open Colors
 
 type Distances = {
@@ -44,7 +44,7 @@ type Distances with
 let distancesContent (distances:Distances) cell =
     if distances.Cells.ContainsKey cell then (string distances.[cell]).PadRight 3 else "   "
 
-let floatRgba32 (r:float, g:float, b:float) = Rgba32 (r |> byte, g |> byte, b |> byte)
+let floatRgba32 (r:float, g:float, b:float) = {R = r |> byte; G = g |> byte; B = b |> byte; A = byte 255}
 
 let emptyColor = (200.0, 200.0, 200.0) |> floatRgba32
 

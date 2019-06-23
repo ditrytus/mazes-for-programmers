@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DrawSvgRegular.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="Mask.fs" />
