@@ -7,12 +7,12 @@
     <Compile Include="Utils.fs" />
     <Compile Include="Grid.fs" />
     <Compile Include="Mask.fs" />
-    <Compile Include="MaskPng.fs" />
     <Compile Include="BinaryTree.fs" />
     <Compile Include="Sidewinder.fs" />
     <Compile Include="AldousBroder.fs" />
     <Compile Include="Wilson.fs" />
     <Compile Include="HuntAndKill.fs" />
+    <Compile Include="RecursiveBacktracker.fs" />
     <Compile Include="DrawCommons.fs" />
     <Compile Include="DrawAsciiRegular.fs" />
     <Compile Include="DrawPngRegular.fs" />
@@ -21,7 +21,6 @@
     <Compile Include="Path.fs" />
     <Compile Include="Distances.fs" />
     <Compile Include="Dijkstra.fs" />
-    <Compile Include="RecursiveBacktracker.fs" />
     <Compile Include="DepthFirstSearch.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

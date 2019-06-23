@@ -1,15 +1,14 @@
 ﻿open Mazes.Core.Grid
-open Mazes.Core.Mask
-open Mazes.Core.BinaryTree
-open Mazes.Core.Sidewinder
+open Mazes.Core.Generation.BinaryTree
+open Mazes.Core.Generation.Sidewinder
 open Mazes.Core.Draw.AsciiRegular
 open Mazes.Core.Draw.PngRegular
 open Mazes.Core.Distances
-open Mazes.Core.AldousBroder
+open Mazes.Core.Generation.AldousBroder
 open Mazes.Core.Draw.PngPolar
-open Mazes.Core.Wilson
-open Mazes.Core.RecursiveBacktracker
-open Mazes.Core.HuntAndKill
+open Mazes.Core.Generation.Wilson
+open Mazes.Core.Generation.RecursiveBacktracker
+open Mazes.Core.Generation.HuntAndKill
 open System
 open FSharp.Collections.ParallelSeq
 
@@ -115,7 +114,7 @@ let main _ =
             maskedMaze |> drawPngRegular (DateTime.Now.Ticks.ToString() + ".png") 10 (shadeColor dist)
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s" |> drawNext
         | ConsoleKey.N ->
-            let maskedMaze = grid |> Mazes.Core.Mask.mask (Mazes.Core.MaskPng.fromPngFile "mask.png") |> recursiveBacktracker
+            let maskedMaze = grid |> Mazes.Core.Mask.mask (Mazes.Core.Mask.Png.fromFile "mask.png") |> recursiveBacktracker
             maskedMaze |> drawWhitePngRegular (DateTime.Now.Ticks.ToString() + ".png") 10
             maskedMaze |> drawAsciiEmpty |> printfn "\n%s"
         | ConsoleKey.P ->

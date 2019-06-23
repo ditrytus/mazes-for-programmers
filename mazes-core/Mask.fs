@@ -19,3 +19,13 @@ module Mask =
                             | Some cell -> if mask cell then Some cell else None )) }
 
     let fromArray (array:bool[,]) {Row=row;Column=col} = array.[row,col]
+
+    module Png =
+
+        open System.IO
+        open SixLabors.ImageSharp
+        open SixLabors.ImageSharp.PixelFormats
+
+        let fromFile filename  =
+            let image = File.ReadAllBytes filename |> Image.Load
+            Array2D.init image.Width image.Height (fun x y -> image.[x,y] = Rgba32.Black) |> fromArray 

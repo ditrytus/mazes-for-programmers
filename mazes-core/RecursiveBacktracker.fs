@@ -1,8 +1,9 @@
-namespace Mazes.Core
+namespace Mazes.Core.Generation
 
 module RecursiveBacktracker =
 
-    open Grid
+    open Mazes.Core.Grid
+    open Mazes.Core.Utils
 
     let recursiveBacktracker (grid:Grid<_>):Grid<_> =
 
@@ -12,7 +13,7 @@ module RecursiveBacktracker =
             | [] -> grid
             | head::tail ->
 
-                match head |> grid.NeighboursOf |> List.except (Seq.ofList visited) |> Utils.randomItem with
+                match head |> grid.NeighboursOf |> List.except (Seq.ofList visited) |> randomItem with
                 | None -> grid |> carvePath tail visited
                 | Some cell -> grid.Link head cell |> carvePath (cell::stack) (cell::visited)
 

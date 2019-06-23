@@ -1,9 +1,9 @@
-﻿namespace Mazes.Core
+﻿namespace Mazes.Core.Generation
 
 module Wilson =
 
-    open Grid
-    open Utils
+    open Mazes.Core.Grid
+    open Mazes.Core.Utils
 
     let wilson (grid:Grid<_>) =
 

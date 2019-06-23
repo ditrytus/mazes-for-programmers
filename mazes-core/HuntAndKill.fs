@@ -1,9 +1,9 @@
-﻿namespace Mazes.Core
+﻿namespace Mazes.Core.Generation
 
 module HuntAndKill = 
 
-    open Grid
-    open Utils
+    open Mazes.Core.Grid
+    open Mazes.Core.Utils
 
     let huntAndKill (grid:Grid<_>) = 
 
